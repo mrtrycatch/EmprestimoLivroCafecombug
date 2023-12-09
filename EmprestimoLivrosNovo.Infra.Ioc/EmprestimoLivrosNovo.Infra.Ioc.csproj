@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.17" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmprestimoLivrosNovo.Application\EmprestimoLivrosNovo.Application.csproj" />
+    <ProjectReference Include="..\EmprestimoLivrosNovo.Domain\EmprestimoLivrosNovo.Domain.csproj" />
+    <ProjectReference Include="..\EmprestimoLivrosNovo.Infra.Data\EmprestimoLivrosNovo.Infra.Data.csproj" />
+  </ItemGroup>
+
+</Project>
