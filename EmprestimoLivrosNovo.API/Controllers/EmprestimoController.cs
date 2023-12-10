@@ -2,6 +2,7 @@
 using EmprestimoLivrosNovo.Application.Interfaces;
 using EmprestimoLivrosNovo.Infra.Ioc;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace EmprestimoLivrosNovo.API.Controllers
@@ -19,9 +20,11 @@ namespace EmprestimoLivrosNovo.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Incluir(EmprestimoDTO emprestimoDTO)
+        public async Task<ActionResult> Incluir(EmprestimoPostDTO emprestimoPostDTO)
         {
-            var emprestimoDTOIncluido = await _emprestimoService.Incluir(emprestimoDTO);
+            emprestimoPostDTO.DataEmprestimo = DateTime.Now;
+            emprestimoPostDTO.Entregue = false;
+            var emprestimoDTOIncluido = await _emprestimoService.Incluir(emprestimoPostDTO);
             if (emprestimoDTOIncluido == null)
             {
                 return BadRequest("Ocorreu um erro ao incluir o emprestimo.");
@@ -31,8 +34,17 @@ namespace EmprestimoLivrosNovo.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Alterar(EmprestimoDTO emprestimoDTO)
+        public async Task<ActionResult> Alterar(EmprestimoPutDTO emprestimoPutDTO)
         {
+            var emprestimoDTO = await _emprestimoService.SelecionarAsync(emprestimoPutDTO.Id);
+            if (emprestimoDTO == null)
+            {
+                return NotFound("Empréstimo não encontrado.");
+            }
+
+            emprestimoDTO.DataEntrega = emprestimoPutDTO.DataEntrega;
+            emprestimoDTO.Entregue = emprestimoPutDTO.Entregue;
+
             var emprestimoDTOAlterado = await _emprestimoService.Alterar(emprestimoDTO);
             if (emprestimoDTOAlterado == null)
             {

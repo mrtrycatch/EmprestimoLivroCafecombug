@@ -21,6 +21,7 @@ namespace EmprestimoLivrosNovo.Domain.Entities
         public Emprestimo(int id, int idCliente, int idLivro, DateTime dataEmprestimo, DateTime dataEntrega, bool entregue)
         {
             DomainExceptionValidation.When(id < 0, "Id do empréstimo deve ser positivo.");
+            Id = id;
             ValidateDomain(idCliente, idLivro, dataEmprestimo, dataEntrega, entregue);
         }
 

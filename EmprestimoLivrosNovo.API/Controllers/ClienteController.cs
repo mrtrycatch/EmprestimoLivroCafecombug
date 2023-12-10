@@ -9,7 +9,6 @@ namespace EmprestimoLivrosNovo.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class ClienteController : Controller
     {
         private readonly IClienteService _clienteService;

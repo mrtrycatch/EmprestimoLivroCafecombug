@@ -35,9 +35,9 @@ namespace EmprestimoLivrosNovo.Application.Services
             return _mapper.Map<EmprestimoDTO>(emprestimoExcluido);
         }
 
-        public async Task<EmprestimoDTO> Incluir(EmprestimoDTO emprestimoDTO)
+        public async Task<EmprestimoDTO> Incluir(EmprestimoPostDTO emprestimoPostDTO)
         {
-            var emprestimo = _mapper.Map<Emprestimo>(emprestimoDTO);
+            var emprestimo = _mapper.Map<Emprestimo>(emprestimoPostDTO);
             var emprestimoIncluido = await _repository.Incluir(emprestimo);
             return _mapper.Map<EmprestimoDTO>(emprestimoIncluido);
         }
