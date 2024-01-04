@@ -27,7 +27,6 @@ namespace EmprestimoLivrosNovo.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddInfrastructureSwagger();
             //services.AddSwaggerGen(c =>
@@ -35,6 +34,8 @@ namespace EmprestimoLivrosNovo.API
             //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "EmprestimoLivrosNovo.API", Version = "v1" });
             //});
             services.AddInfrastructure(Configuration);
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,7 +54,6 @@ namespace EmprestimoLivrosNovo.API
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
 
             app.UseEndpoints(endpoints =>
             {

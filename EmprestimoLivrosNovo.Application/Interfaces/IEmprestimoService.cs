@@ -14,6 +14,8 @@ namespace EmprestimoLivrosNovo.Application.Interfaces
         Task<EmprestimoDTO> Alterar(EmprestimoDTO emprestimoDTO);
         Task<EmprestimoDTO> Excluir(int id);
         Task<EmprestimoDTO> SelecionarAsync(int id);
+        
         Task<IEnumerable<EmprestimoDTO>> SelecionarTodosAsync();
+        Task<bool> VerificaDisponibilidadeAsync(int idLivro);
     }
 }

@@ -14,5 +14,6 @@ namespace EmprestimoLivrosNovo.Domain.Interfaces
         Task<Emprestimo> Excluir(int id);
         Task<Emprestimo> SelecionarAsync(int id);
         Task<IEnumerable<Emprestimo>> SelecionarTodosAsync();
+        Task<bool> VerificaDisponibilidadeAsync(int idLivro);
     }
 }

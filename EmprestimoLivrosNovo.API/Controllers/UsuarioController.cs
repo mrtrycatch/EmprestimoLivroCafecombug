@@ -2,6 +2,8 @@
 using EmprestimoLivrosNovo.Application.DTOs;
 using EmprestimoLivrosNovo.Application.Interfaces;
 using EmprestimoLivrosNovo.Domain.Account;
+using EmprestimoLivrosNovo.Infra.Ioc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -23,6 +25,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserToken>> Incluir(UsuarioDTO usuarioDTO)
         {
+
             if (usuarioDTO == null)
             {
                 return BadRequest("Dados inválidos");
@@ -34,6 +37,28 @@ namespace EmprestimoLivrosNovo.API.Controllers
             {
                 return BadRequest("Este e-mail já possui um cadastro.");
             }
+
+            var existeUsuarioSistema = await _usuarioService.ExisteUsuarioCadastradoAsync();
+
+            if (!existeUsuarioSistema)
+            {
+                usuarioDTO.IsAdmin = true;
+            }
+            else
+            {
+                if (User.FindFirst("id") == null)
+                {
+                    return Unauthorized();
+                }
+
+                var userId = User.GetId();
+                var user = await _usuarioService.SelecionarAsync(userId);
+                if (!user.IsAdmin)
+                {
+                    return Unauthorized("Você não tem permissão para incluir novos usuários.");
+                }
+            }
+            
 
             var usuario = await _usuarioService.Incluir(usuarioDTO);
             if (usuario == null)

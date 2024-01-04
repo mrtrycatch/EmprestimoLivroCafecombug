@@ -55,5 +55,13 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
         {
             return await _context.Emprestimo.Include(x => x.Cliente).Include(x => x.Livro).ToListAsync();
         }
+
+        public async Task<bool> VerificaDisponibilidadeAsync(int idLivro)
+        {
+            var existeEmprestimo = await _context.Emprestimo.
+                Where(x => x.IdLivro == idLivro && x.Entregue == false).AnyAsync();
+
+            return !existeEmprestimo;
+        }
     }
 }

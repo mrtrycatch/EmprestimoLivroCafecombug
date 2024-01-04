@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EmprestimoLivrosNovo.Infra.Data.Migrations
 {
-    public partial class colunaIsAdminUsuario : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

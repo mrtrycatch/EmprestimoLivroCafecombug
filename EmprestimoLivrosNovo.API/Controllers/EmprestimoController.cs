@@ -1,6 +1,7 @@
 ﻿using EmprestimoLivrosNovo.Application.DTOs;
 using EmprestimoLivrosNovo.Application.Interfaces;
 using EmprestimoLivrosNovo.Infra.Ioc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class EmprestimoController : Controller
     {
 
@@ -22,6 +24,13 @@ namespace EmprestimoLivrosNovo.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Incluir(EmprestimoPostDTO emprestimoPostDTO)
         {
+
+            var disponivel = await _emprestimoService.VerificaDisponibilidadeAsync(emprestimoPostDTO.IdLivro);
+            if (!disponivel)
+            {
+                return BadRequest("O livro não está disponível para empréstimo.");
+            }
+
             emprestimoPostDTO.DataEmprestimo = DateTime.Now;
             emprestimoPostDTO.Entregue = false;
             var emprestimoDTOIncluido = await _emprestimoService.Incluir(emprestimoPostDTO);

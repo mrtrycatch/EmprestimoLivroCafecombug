@@ -53,5 +53,10 @@ namespace EmprestimoLivrosNovo.Application.Services
             var emprestimos = await _repository.SelecionarTodosAsync();
             return _mapper.Map<IEnumerable<EmprestimoDTO>>(emprestimos);
         }
+
+        public async Task<bool> VerificaDisponibilidadeAsync(int idLivro)
+        {
+            return await _repository.VerificaDisponibilidadeAsync(idLivro);
+        }
     }
 }

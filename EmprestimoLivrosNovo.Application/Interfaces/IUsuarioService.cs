@@ -15,5 +15,6 @@ namespace EmprestimoLivrosNovo.Application.Interfaces
         Task<UsuarioDTO> Excluir(int id);
         Task<UsuarioDTO> SelecionarAsync(int id);
         Task<IEnumerable<UsuarioDTO>> SelecionarTodosAsync();
+        Task<bool> ExisteUsuarioCadastradoAsync();
     }
 }

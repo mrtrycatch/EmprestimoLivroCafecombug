@@ -39,6 +39,11 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             return null;
         }
 
+        public async Task<bool> ExisteUsuarioCadastradoAsync()
+        {
+            return await _context.Usuario.AnyAsync();
+        }
+
         public async Task<Usuario> Incluir(Usuario usuario)
         {
             _context.Usuario.Add(usuario);
