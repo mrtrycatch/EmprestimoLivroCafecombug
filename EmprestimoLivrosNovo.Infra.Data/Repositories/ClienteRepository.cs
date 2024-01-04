@@ -1,6 +1,8 @@
 ﻿using EmprestimoLivrosNovo.Domain.Entities;
 using EmprestimoLivrosNovo.Domain.Interfaces;
+using EmprestimoLivrosNovo.Domain.Pagination;
 using EmprestimoLivrosNovo.Infra.Data.Context;
+using EmprestimoLivrosNovo.Infra.Data.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -51,9 +53,10 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             return await _context.Cliente.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<Cliente>> SelecionarTodosAsync()
+        public async Task<PagedList<Cliente>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
-            return await _context.Cliente.ToListAsync();
+            var query = _context.Cliente.AsQueryable();
+            return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
         }
     }
 }
