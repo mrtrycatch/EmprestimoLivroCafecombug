@@ -3,6 +3,7 @@ using EmprestimoLivrosNovo.Application.DTOs;
 using EmprestimoLivrosNovo.Application.Interfaces;
 using EmprestimoLivrosNovo.Domain.Entities;
 using EmprestimoLivrosNovo.Domain.Interfaces;
+using EmprestimoLivrosNovo.Domain.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,10 +49,11 @@ namespace EmprestimoLivrosNovo.Application.Services
             return _mapper.Map<EmprestimoDTO>(emprestimo);
         }
 
-        public async Task<IEnumerable<EmprestimoDTO>> SelecionarTodosAsync()
+        public async Task<PagedList<EmprestimoDTO>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
-            var emprestimos = await _repository.SelecionarTodosAsync();
-            return _mapper.Map<IEnumerable<EmprestimoDTO>>(emprestimos);
+            var emprestimos = await _repository.SelecionarTodosAsync(pageNumber, pageSize);
+            var emprestimosDTO = _mapper.Map<IEnumerable<EmprestimoDTO>>(emprestimos);
+            return new PagedList<EmprestimoDTO>(emprestimosDTO, pageNumber, pageSize, emprestimos.TotalCount);
         }
 
         public async Task<bool> VerificaDisponibilidadeAsync(int idLivro)
