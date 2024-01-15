@@ -3,6 +3,7 @@ using EmprestimoLivrosNovo.Application.DTOs;
 using EmprestimoLivrosNovo.Application.Interfaces;
 using EmprestimoLivrosNovo.Domain.Entities;
 using EmprestimoLivrosNovo.Domain.Interfaces;
+using EmprestimoLivrosNovo.Domain.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +24,23 @@ namespace EmprestimoLivrosNovo.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<UsuarioDTO> Alterar(UsuarioDTO usuarioDTO)
+        public async Task<UsuarioPutDTO> Alterar(UsuarioPutDTO usuarioPutDTO)
         {
-            var usuario = _mapper.Map<Usuario>(usuarioDTO);
+            var usuario = _mapper.Map<Usuario>(usuarioPutDTO);
+
+
+            if (usuarioPutDTO.Password != null)
+            {
+                using var hmac = new HMACSHA512();
+                byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(usuarioPutDTO.Password));
+                byte[] passwordSalt = hmac.Key;
+
+                usuario.AlterarSenha(passwordHash, passwordSalt);
+
+            }
+
             var usuarioAlterado = await _repository.Alterar(usuario);
-            return _mapper.Map<UsuarioDTO>(usuarioAlterado);
+            return _mapper.Map<UsuarioPutDTO>(usuarioAlterado);
         }
 
         public async Task<UsuarioDTO> Excluir(int id)
@@ -66,10 +79,12 @@ namespace EmprestimoLivrosNovo.Application.Services
             return _mapper.Map<UsuarioDTO>(usuario);
         }
 
-        public async Task<IEnumerable<UsuarioDTO>> SelecionarTodosAsync()
+        public async Task<PagedList<UsuarioDTO>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
-            var usuarios = await _repository.SelecionarTodosAsync();
-            return _mapper.Map<IEnumerable<UsuarioDTO>>(usuarios);
+            var usuarios = await _repository.SelecionarTodosAsync(pageNumber, pageSize);
+            var usuariosDTO = _mapper.Map<IEnumerable<UsuarioDTO>>(usuarios);
+            return new PagedList<UsuarioDTO>
+                (usuariosDTO, pageNumber, usuarios.TotalPages, usuarios.PageSize, usuarios.TotalCount);
         }
     }
 }

@@ -1,3 +1,4 @@
+using EmprestimoLivrosNovo.API.Middleware;
 using EmprestimoLivrosNovo.Infra.Ioc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,8 +49,10 @@ namespace EmprestimoLivrosNovo.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EmprestimoLivrosNovo.API v1"));
             }
 
-            app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionMiddleware>();
 
+            app.UseHttpsRedirection();
+            app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:4200"));
             app.UseRouting();
 
             app.UseAuthentication();

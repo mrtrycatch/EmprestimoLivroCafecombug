@@ -1,4 +1,5 @@
-﻿using EmprestimoLivrosNovo.API.Models;
+﻿using EmprestimoLivrosNovo.API.Extensions;
+using EmprestimoLivrosNovo.API.Models;
 using EmprestimoLivrosNovo.Application.DTOs;
 using EmprestimoLivrosNovo.Application.Interfaces;
 using EmprestimoLivrosNovo.Domain.Account;
@@ -58,7 +59,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
                     return Unauthorized("Você não tem permissão para incluir novos usuários.");
                 }
             }
-            
+
 
             var usuario = await _usuarioService.Incluir(usuarioDTO);
             if (usuario == null)
@@ -66,11 +67,13 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 return BadRequest("Ocorreu um erro ao cadastrar.");
             }
 
-            var token = _authenticateService.GenerateToken(usuario.Id, usuario.Email);
-            return new UserToken
-            {
-                Token = token
-            };
+            //var token = _authenticateService.GenerateToken(usuario.Id, usuario.Email);
+            //return new UserToken
+            //{
+            //    Token = token
+            //};
+
+            return Ok(new {message = "Usuário incluído com sucesso!"});
 
         }
 
@@ -97,6 +100,72 @@ namespace EmprestimoLivrosNovo.API.Controllers
             {
                 Token = token
             };
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> SelecionarTodos([FromQuery] PaginationParams paginationParams)
+        {
+            var userId = User.GetId();
+            var user = await _usuarioService.SelecionarAsync(userId);
+
+            if (!user.IsAdmin)
+            {
+                return Unauthorized("Você não tem permissão para consultar os usuários do sistema.");
+            }
+
+            var usuarios = await _usuarioService.SelecionarTodosAsync(paginationParams.PageNumber, paginationParams.PageSize);
+            Response.AddPaginationHeader(new PaginationHeader(paginationParams.PageNumber, usuarios.PageSize,
+                usuarios.TotalCount, usuarios.TotalPages));
+            return Ok(usuarios);
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<ActionResult> SelecionarById(int id)
+        {
+            var userId = User.GetId();
+            var user = await _usuarioService.SelecionarAsync(userId);
+
+            if (!user.IsAdmin && user.Id != id)
+            {
+                return BadRequest("Você não tem permissão para consultar os usuários do sistema.");
+            }
+
+            var usuario = await _usuarioService.SelecionarAsync(id);
+            return Ok(usuario);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<ActionResult> Excluir(int id)
+        {
+            var userId = User.GetId();
+            var user = await _usuarioService.SelecionarAsync(userId);
+
+            if (!user.IsAdmin)
+            {
+                return BadRequest("Você não tem permissão para consultar os usuários do sistema.");
+            }
+
+            var usuario = await _usuarioService.Excluir(id);
+            return Ok(usuario);
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<ActionResult> Alterar(UsuarioPutDTO usuarioPutDTO)
+        {
+            var userId = User.GetId();
+            var user = await _usuarioService.SelecionarAsync(userId);
+
+            if (!user.IsAdmin)
+            {
+                return BadRequest("Você não tem permissão para alterar os usuários do sistema.");
+            }
+
+            var usuario = await _usuarioService.Alterar(usuarioPutDTO);
+            return Ok(new {message = "Usuário alterado com sucesso!" });
         }
 
     }

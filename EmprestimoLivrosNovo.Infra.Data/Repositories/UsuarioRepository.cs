@@ -1,6 +1,8 @@
 ﻿using EmprestimoLivrosNovo.Domain.Entities;
 using EmprestimoLivrosNovo.Domain.Interfaces;
+using EmprestimoLivrosNovo.Domain.Pagination;
 using EmprestimoLivrosNovo.Infra.Data.Context;
+using EmprestimoLivrosNovo.Infra.Data.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,6 +23,12 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<Usuario> Alterar(Usuario usuario)
         {
+            if (usuario.PasswordSalt == null || usuario.PasswordHash == null)
+            {
+                var passwordCripgrafado = await _context.Usuario.Where(x => x.Id == usuario.Id).Select(x => new { x.PasswordHash, x.PasswordSalt}).FirstOrDefaultAsync();
+                usuario.AlterarSenha(passwordCripgrafado.PasswordHash, passwordCripgrafado.PasswordSalt);
+            }
+
             _context.Usuario.Update(usuario);
             await _context.SaveChangesAsync();
             return usuario;
@@ -56,9 +64,10 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             return await _context.Usuario.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<Usuario>> SelecionarTodosAsync()
+        public async Task<PagedList<Usuario>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
-            return await _context.Usuario.ToListAsync();
+            var query = _context.Usuario.AsQueryable();
+            return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
         }
     }
 }
