@@ -98,7 +98,9 @@ namespace EmprestimoLivrosNovo.API.Controllers
 
             return new UserToken
             {
-                Token = token
+                Token = token,
+                IsAdmin = usuario.IsAdmin,
+                Email = usuario.Email
             };
         }
 
@@ -127,12 +129,17 @@ namespace EmprestimoLivrosNovo.API.Controllers
             var userId = User.GetId();
             var user = await _usuarioService.SelecionarAsync(userId);
 
+            if (id == 0)
+            {
+                id = userId;
+            }
+
             if (!user.IsAdmin && user.Id != id)
             {
                 return BadRequest("Você não tem permissão para consultar os usuários do sistema.");
             }
 
-            var usuario = await _usuarioService.SelecionarAsync(id);
+            var usuario = await _usuarioService.SelecionarAsync((int)id);
             return Ok(usuario);
         }
 
@@ -159,9 +166,15 @@ namespace EmprestimoLivrosNovo.API.Controllers
             var userId = User.GetId();
             var user = await _usuarioService.SelecionarAsync(userId);
 
-            if (!user.IsAdmin)
+
+            if (!user.IsAdmin && usuarioPutDTO.Id != userId)
             {
-                return BadRequest("Você não tem permissão para alterar os usuários do sistema.");
+                return Unauthorized("Você não tem permissão para alterar os usuários do sistema.");
+            }
+
+            if (!user.IsAdmin && usuarioPutDTO.Id == userId && usuarioPutDTO.IsAdmin)
+            {
+                return Unauthorized("Você não tem permissão para definir você mesmo como administrador.");
             }
 
             var usuario = await _usuarioService.Alterar(usuarioPutDTO);
