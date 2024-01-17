@@ -136,7 +136,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
 
             if (!user.IsAdmin && user.Id != id)
             {
-                return BadRequest("Você não tem permissão para consultar os usuários do sistema.");
+                return Unauthorized("Você não tem permissão para consultar os usuários do sistema.");
             }
 
             var usuario = await _usuarioService.SelecionarAsync((int)id);
@@ -152,7 +152,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
 
             if (!user.IsAdmin)
             {
-                return BadRequest("Você não tem permissão para consultar os usuários do sistema.");
+                return Unauthorized("Você não tem permissão para excluir os usuários do sistema.");
             }
 
             var usuario = await _usuarioService.Excluir(id);
@@ -177,7 +177,6 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 return Unauthorized("Você não tem permissão para definir você mesmo como administrador.");
             }
 
-            var usuario = await _usuarioService.Alterar(usuarioPutDTO);
             return Ok(new {message = "Usuário alterado com sucesso!" });
         }
 
