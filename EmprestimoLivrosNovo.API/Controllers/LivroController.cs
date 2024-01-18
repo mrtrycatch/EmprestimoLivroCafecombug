@@ -32,7 +32,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 return BadRequest("Ocorreu um erro ao incluir o livro.");
             }
 
-            return Ok("Livro incluído com sucesso!");
+            return Ok(new { message = "Livro incluído com sucesso!" });
         }
 
         [HttpPut]
@@ -44,7 +44,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 return BadRequest("Ocorreu um erro ao alterar o livro.");
             }
 
-            return Ok("Livro alterado com sucesso!");
+            return Ok(new { message = "Livro alterado com sucesso!" });
         }
 
         [HttpDelete]
