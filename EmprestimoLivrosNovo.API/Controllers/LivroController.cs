@@ -56,7 +56,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 return BadRequest("Ocorreu um erro ao excluir o livro.");
             }
 
-            return Ok("Livro excluído com sucesso!");
+            return Ok(new { message = "Livro excluído com sucesso!" });
         }
 
         [HttpGet("{id}")]

@@ -32,7 +32,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 return BadRequest("Ocorreu um erro ao incluir o cliente.");
             }
 
-            return Ok("Cliente incluído com sucesso!");
+            return Ok(new { message = "Cliente incluído com sucesso!" });
         }
 
         [HttpPut]
@@ -44,7 +44,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 return BadRequest("Ocorreu um erro ao alterar o cliente.");
             }
 
-            return Ok("Cliente alterado com sucesso!");
+            return Ok(new { message = "Cliente alterado com sucesso!" });
         }
 
         [HttpDelete]
@@ -65,7 +65,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 return BadRequest("Ocorreu um erro ao excluir o cliente.");
             }
 
-            return Ok("Cliente excluído com sucesso!");
+            return Ok(new { message = "Cliente excluído com sucesso!" });
         }
 
         [HttpGet("{id}")]
