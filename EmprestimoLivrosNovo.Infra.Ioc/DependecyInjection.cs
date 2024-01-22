@@ -61,6 +61,7 @@ namespace EmprestimoLivrosNovo.Infra.Ioc
             services.AddScoped<ILivroRepository, LivroRepository>();
             services.AddScoped<IEmprestimoRepository, EmprestimoRepository>();
             services.AddScoped<ISistemaRepository, SistemaRepository>();
+            services.AddScoped<ILivroEmprestadoRepository, LivroEmprestadoRepository>();
             
 
             // Services
@@ -70,6 +71,7 @@ namespace EmprestimoLivrosNovo.Infra.Ioc
             services.AddScoped<ILivroService, LivroService>();
             services.AddScoped<IEmprestimoService, EmprestimoService>();
             services.AddScoped<ISistemaService, SistemaService>();
+            services.AddScoped<ILivroEmprestadoService, LivroEmprestadoService>();
 
             return services;
         }

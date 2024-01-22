@@ -50,20 +50,20 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<Emprestimo> SelecionarAsync(int id)
         {
-            return await _context.Emprestimo.Include(x => x.Cliente).Include(x => x.Livro).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Emprestimo.Include(x => x.Cliente).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<PagedList<Emprestimo>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
-            var query = _context.Emprestimo.Include(x => x.Cliente).Include(x => x.Livro).AsQueryable();
+            var query = _context.Emprestimo.Include(x => x.Cliente).AsQueryable();
             return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
         }
 
-        public async Task<bool> VerificaDisponibilidadeAsync(int idLivro)
+        public async Task<bool> VerificaDisponibilidadeAsync(int[] idsLivros)
         {
-            var existeEmprestimo = await _context.Emprestimo.
-                Where(x => x.IdLivro == idLivro && x.Entregue == false).AnyAsync();
-
+            var existeEmprestimo = await _context.Emprestimo
+                .Where(x => x.LivrosEmprestados.Any(le => idsLivros.Contains(le.IdLivro)) && !x.Entregue)
+                .AnyAsync();
             return !existeEmprestimo;
         }
     }

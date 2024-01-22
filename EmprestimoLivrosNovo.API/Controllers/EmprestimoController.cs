@@ -6,6 +6,7 @@ using EmprestimoLivrosNovo.Infra.Ioc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EmprestimoLivrosNovo.API.Controllers
@@ -17,17 +18,19 @@ namespace EmprestimoLivrosNovo.API.Controllers
     {
 
         private readonly IEmprestimoService _emprestimoService;
+        private readonly ILivroEmprestadoService _livroEmprestadoService;
 
-        public EmprestimoController(IEmprestimoService emprestimoService)
+        public EmprestimoController(IEmprestimoService emprestimoService, ILivroEmprestadoService livroEmprestadoService)
         {
             _emprestimoService = emprestimoService;
+            _livroEmprestadoService = livroEmprestadoService;
         }
 
         [HttpPost]
         public async Task<ActionResult> Incluir(EmprestimoPostDTO emprestimoPostDTO)
         {
 
-            var disponivel = await _emprestimoService.VerificaDisponibilidadeAsync(emprestimoPostDTO.IdLivro);
+            var disponivel = await _emprestimoService.VerificaDisponibilidadeAsync(emprestimoPostDTO.idsLivros);
             if (!disponivel)
             {
                 return BadRequest("O livro não está disponível para empréstimo.");
@@ -39,6 +42,22 @@ namespace EmprestimoLivrosNovo.API.Controllers
             if (emprestimoDTOIncluido == null)
             {
                 return BadRequest("Ocorreu um erro ao incluir o emprestimo.");
+            }
+            else
+            {
+                List<LivroEmprestadoDTO> livrosEmprestadosDTO = new  List<LivroEmprestadoDTO>();
+                LivroEmprestadoDTO livroEmprestado;
+                foreach(var idLivroEmprestado in emprestimoPostDTO.idsLivros)
+                {
+                    livroEmprestado = new LivroEmprestadoDTO
+                    {
+                        IdEmprestimo = emprestimoDTOIncluido.Id,
+                        IdLivro = idLivroEmprestado
+                    };
+                    livrosEmprestadosDTO.Add(livroEmprestado);
+                }
+
+                await _livroEmprestadoService.IncluirVariosAsync(livrosEmprestadosDTO);
             }
 
             return Ok("Emprestimo incluído com sucesso!");

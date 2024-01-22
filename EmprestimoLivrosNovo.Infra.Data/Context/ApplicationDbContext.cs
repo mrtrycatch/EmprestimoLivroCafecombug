@@ -16,6 +16,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Context
         public DbSet<Emprestimo> Emprestimo { get; set; }
         public DbSet<Livro> Livro { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<LivroEmprestado> LivroEmprestado { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

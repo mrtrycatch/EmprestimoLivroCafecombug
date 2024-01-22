@@ -56,9 +56,9 @@ namespace EmprestimoLivrosNovo.Application.Services
             return new PagedList<EmprestimoDTO>(emprestimosDTO, pageNumber, pageSize, emprestimos.TotalCount);
         }
 
-        public async Task<bool> VerificaDisponibilidadeAsync(int idLivro)
+        public async Task<bool> VerificaDisponibilidadeAsync(int[] idsLivros)
         {
-            return await _repository.VerificaDisponibilidadeAsync(idLivro);
+            return await _repository.VerificaDisponibilidadeAsync(idsLivros);
         }
     }
 }

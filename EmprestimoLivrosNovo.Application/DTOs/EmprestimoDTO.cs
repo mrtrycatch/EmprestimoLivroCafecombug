@@ -15,6 +15,5 @@ namespace EmprestimoLivrosNovo.Application.DTOs
         public DateTime DataEntrega { get; set; }
         public bool Entregue { get; set; }
         public ClienteDTO ClienteDTO { get; set; }
-        public LivroDTO LivroDTO { get; set; }
     }
 }
