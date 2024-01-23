@@ -83,13 +83,13 @@ namespace EmprestimoLivrosNovo.API.Controllers
             var existe = await _authenticateService.UserExists(loginModel.Email);
             if (!existe)
             {
-                return Unauthorized(new { message = "Usuário não existe." });
+                return Unauthorized("Usuário não existe.");
             }
 
             var result = await _authenticateService.AuthenticateAsync(loginModel.Email, loginModel.Password);
             if (!result)
             {
-                return Unauthorized(new { message = "Usuário ou senha inválido." });
+                return Unauthorized("Usuário ou senha inválido.");
             }
 
             var usuario = await _authenticateService.GetUserByEmail(loginModel.Email);
@@ -169,12 +169,12 @@ namespace EmprestimoLivrosNovo.API.Controllers
 
             if (!user.IsAdmin && usuarioPutDTO.Id != userId)
             {
-                return Unauthorized(new { message = "Você não tem permissão para alterar os usuários do sistema." });
+                return Unauthorized("Você não tem permissão para alterar os usuários do sistema.");
             }
 
             if (!user.IsAdmin && usuarioPutDTO.Id == userId && usuarioPutDTO.IsAdmin)
             {
-                return Unauthorized(new { message = "Você não tem permissão para definir você mesmo como administrador." });
+                return Unauthorized("Você não tem permissão para definir você mesmo como administrador.");
             }
 
             return Ok(new {message = "Usuário alterado com sucesso!" });

@@ -10,7 +10,7 @@ namespace EmprestimoLivrosNovo.Application.DTOs
     {
         public int Id { get; set; }
         public int IdCliente { get; set; }
-        public int IdLivro { get; set; }
+        //public int IdLivro { get; set; }
         public DateTime DataEmprestimo { get; set; }
         public DateTime DataEntrega { get; set; }
         public bool Entregue { get; set; }

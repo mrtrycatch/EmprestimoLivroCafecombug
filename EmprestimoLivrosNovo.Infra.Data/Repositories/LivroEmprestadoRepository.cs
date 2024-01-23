@@ -73,5 +73,29 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
         {
             return await _context.LivroEmprestado.Where(x => x.IdEmprestimo == id).Include(x => x.Livro).ToListAsync();
         }
+
+        public async Task<IEnumerable<LivroEmprestado>> SubstituirTodosAsync(List<LivroEmprestado> livrosEmprestados)
+        {
+            if (livrosEmprestados.Count == 0)
+            {
+                return new List<LivroEmprestado>();
+            }
+
+            var idsLivrosValidos = await _context.Livro
+            .Where(l => livrosEmprestados.Select(le => le.IdLivro).Contains(l.Id))
+            .Select(l => l.Id)
+            .ToListAsync();
+
+            var livrosEmprestadosValidos = livrosEmprestados
+                .Where(le => idsLivrosValidos.Contains(le.IdLivro))
+                .ToList();
+
+            var livrosEmprestadosByEmprestimo = _context.LivroEmprestado.Where(x => x.IdEmprestimo == livrosEmprestados[0].IdEmprestimo);
+            _context.LivroEmprestado.RemoveRange(livrosEmprestadosByEmprestimo);
+
+            _context.LivroEmprestado.AddRange(livrosEmprestadosValidos);
+            await _context.SaveChangesAsync();
+            return livrosEmprestados;
+        }
     }
 }

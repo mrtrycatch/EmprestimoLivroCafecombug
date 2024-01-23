@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EmprestimoLivrosNovo.Infra.Data.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class initialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -68,7 +68,6 @@ namespace EmprestimoLivrosNovo.Infra.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
-                    IdLivro = table.Column<int>(type: "int", nullable: false),
                     DataEmprestimo = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataEntrega = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Entregue = table.Column<bool>(type: "bit", nullable: false)
@@ -81,8 +80,27 @@ namespace EmprestimoLivrosNovo.Infra.Data.Migrations
                         column: x => x.IdCliente,
                         principalTable: "Cliente",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LivroEmprestado",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdEmprestimo = table.Column<int>(type: "int", nullable: false),
+                    IdLivro = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LivroEmprestado", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Emprestimo_Livro_IdLivro",
+                        name: "FK_LivroEmprestado_Emprestimo_IdEmprestimo",
+                        column: x => x.IdEmprestimo,
+                        principalTable: "Emprestimo",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_LivroEmprestado_Livro_IdLivro",
                         column: x => x.IdLivro,
                         principalTable: "Livro",
                         principalColumn: "Id");
@@ -94,24 +112,32 @@ namespace EmprestimoLivrosNovo.Infra.Data.Migrations
                 column: "IdCliente");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Emprestimo_IdLivro",
-                table: "Emprestimo",
+                name: "IX_LivroEmprestado_IdEmprestimo",
+                table: "LivroEmprestado",
+                column: "IdEmprestimo");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LivroEmprestado_IdLivro",
+                table: "LivroEmprestado",
                 column: "IdLivro");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Emprestimo");
+                name: "LivroEmprestado");
 
             migrationBuilder.DropTable(
                 name: "Usuario");
 
             migrationBuilder.DropTable(
-                name: "Cliente");
+                name: "Emprestimo");
 
             migrationBuilder.DropTable(
                 name: "Livro");
+
+            migrationBuilder.DropTable(
+                name: "Cliente");
         }
     }
 }

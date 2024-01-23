@@ -53,5 +53,12 @@ namespace EmprestimoLivrosNovo.Application.Services
             var livroEmprestados = await _repository.SelecionarTodosByEmprestimoAsync(id);
             return _mapper.Map<IEnumerable<LivroEmprestadoDTO>>(livroEmprestados);
         }
+
+        public async Task<IEnumerable<LivroEmprestadoDTO>> SubstituirTodosAsync(List<LivroEmprestadoDTO> livrosEmprestadosDTO)
+        {
+            var livrosEmprestados = _mapper.Map<List<LivroEmprestado>>(livrosEmprestadosDTO);
+            var livrosEmprestadosNovos = await _repository.SubstituirTodosAsync(livrosEmprestados);
+            return _mapper.Map<IEnumerable<LivroEmprestadoDTO>>(livrosEmprestadosNovos);
+        }
     }
 }

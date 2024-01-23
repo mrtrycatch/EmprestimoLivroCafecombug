@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EmprestimoLivrosNovo.API.Controllers
@@ -60,7 +61,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 await _livroEmprestadoService.IncluirVariosAsync(livrosEmprestadosDTO);
             }
 
-            return Ok("Emprestimo incluído com sucesso!");
+            return Ok(new { message = "Emprestimo incluído com sucesso!" });
         }
 
         [HttpPut]
@@ -74,14 +75,32 @@ namespace EmprestimoLivrosNovo.API.Controllers
 
             emprestimoDTO.DataEntrega = emprestimoPutDTO.DataEntrega;
             emprestimoDTO.Entregue = emprestimoPutDTO.Entregue;
+            emprestimoDTO.IdCliente = emprestimoPutDTO.IdCliente;
 
             var emprestimoDTOAlterado = await _emprestimoService.Alterar(emprestimoDTO);
             if (emprestimoDTOAlterado == null)
             {
                 return BadRequest("Ocorreu um erro ao alterar o emprestimo.");
             }
+            else
+            {
+                List<LivroEmprestadoDTO> livrosEmprestadosDTO = new List<LivroEmprestadoDTO>();
+                LivroEmprestadoDTO livroEmprestado;
+                foreach (var idLivroEmprestado in emprestimoPutDTO.idsLivros)
+                {
+                    livroEmprestado = new LivroEmprestadoDTO
+                    {
+                        IdEmprestimo = emprestimoDTOAlterado.Id,
+                        IdLivro = idLivroEmprestado
+                    };
+                    livrosEmprestadosDTO.Add(livroEmprestado);
+                }
 
-            return Ok("Emprestimo alterado com sucesso!");
+                await _livroEmprestadoService.SubstituirTodosAsync(livrosEmprestadosDTO);
+
+            }
+
+            return Ok(new { message = "Emprestimo alterado com sucesso!" });
         }
 
         [HttpDelete]
@@ -94,7 +113,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 return BadRequest("Ocorreu um erro ao excluir o emprestimo.");
             }
 
-            return Ok("Emprestimo excluído com sucesso!");
+            return Ok(new { message = "Emprestimo excluído com sucesso!" });
         }
 
         [HttpGet("{id}")]

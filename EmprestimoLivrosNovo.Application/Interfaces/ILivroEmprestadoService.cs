@@ -12,6 +12,7 @@ namespace EmprestimoLivrosNovo.Application.Interfaces
     {
         Task<LivroEmprestadoDTO> Incluir(LivroEmprestadoDTO livroEmprestadoDTO);
         Task<IEnumerable<LivroEmprestadoDTO>> IncluirVariosAsync(IEnumerable<LivroEmprestadoDTO> livrosEmprestadosDTO);
+        Task<IEnumerable<LivroEmprestadoDTO>> SubstituirTodosAsync(List<LivroEmprestadoDTO> livrosEmprestadosDTO);
         Task<LivroEmprestadoDTO> Excluir(int id);
         Task<LivroEmprestadoDTO> SelecionarAsync(int id);
         Task<IEnumerable<LivroEmprestadoDTO>> SelecionarTodosByEmprestimoAsync(int id);

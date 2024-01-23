@@ -15,7 +15,6 @@ namespace EmprestimoLivrosNovo.Domain.Entities
         public string LivroEditora { get; private set; }
         public DateTime LivroAnoPublicacao { get; private set; }
         public string LivroEdicao { get; private set; }
-        public ICollection<Emprestimo> Emprestimos { get; set; }
         public ICollection<LivroEmprestado> LivrosEmprestados { get; set; }
 
         public Livro(int id, string livroNome, string livroAutor, string livroEditora, DateTime livroAnoPublicacao, string livroEdicao)

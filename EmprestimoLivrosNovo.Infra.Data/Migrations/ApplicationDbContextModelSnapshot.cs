@@ -90,14 +90,9 @@ namespace EmprestimoLivrosNovo.Infra.Data.Migrations
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LivroId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("IdCliente");
-
-                    b.HasIndex("LivroId");
 
                     b.ToTable("Emprestimo");
                 });
@@ -198,10 +193,6 @@ namespace EmprestimoLivrosNovo.Infra.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("EmprestimoLivrosNovo.Domain.Entities.Livro", null)
-                        .WithMany("Emprestimos")
-                        .HasForeignKey("LivroId");
-
                     b.Navigation("Cliente");
                 });
 
@@ -236,8 +227,6 @@ namespace EmprestimoLivrosNovo.Infra.Data.Migrations
 
             modelBuilder.Entity("EmprestimoLivrosNovo.Domain.Entities.Livro", b =>
                 {
-                    b.Navigation("Emprestimos");
-
                     b.Navigation("LivrosEmprestados");
                 });
 #pragma warning restore 612, 618
