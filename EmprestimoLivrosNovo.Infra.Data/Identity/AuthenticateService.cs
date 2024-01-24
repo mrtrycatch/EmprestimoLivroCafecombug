@@ -78,7 +78,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Identity
 
         public async Task<bool> UserExists(string email)
         {
-            var usuario = await _context.Usuario.Where(x => x.Email.ToLower() == email.ToLower()).FirstOrDefaultAsync();
+            var usuario = await _context.Usuario.Where(x => x.Email.ToLower() == email.ToLower() && x.Ativo).FirstOrDefaultAsync();
             if (usuario == null)
             {
                 return false;

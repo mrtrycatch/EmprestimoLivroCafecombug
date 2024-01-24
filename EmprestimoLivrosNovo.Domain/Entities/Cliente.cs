@@ -18,6 +18,7 @@ namespace EmprestimoLivrosNovo.Domain.Entities
         public string CliNumero { get; private set; }
         public string CliTelefoneCelular { get; private set; }
         public string CliTelefoneFixo { get; private set; }
+        public bool Excluido { get; private set; }
         public ICollection<Emprestimo> Emprestimos { get; set; }
 
         public Cliente(int id, string cliCPF, string cliNome, string cliEndereco,
@@ -44,6 +45,11 @@ namespace EmprestimoLivrosNovo.Domain.Entities
         {
             ValidateDomain(cliCPF, cliNome, cliEndereco, cliCidade, cliBairro, cliNumero,
                 cliTelefoneCelular, cliTelefoneFixo);
+        }
+
+        public void Excluir()
+        {
+            Excluido = true;
         }
 
         public void ValidateDomain(string cliCPF, string cliNome, string cliEndereco,

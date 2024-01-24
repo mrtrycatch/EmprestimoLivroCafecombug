@@ -176,6 +176,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
             {
                 return Unauthorized("Você não tem permissão para definir você mesmo como administrador.");
             }
+            var usuario = await _usuarioService.Alterar(usuarioPutDTO);
 
             return Ok(new {message = "Usuário alterado com sucesso!" });
         }

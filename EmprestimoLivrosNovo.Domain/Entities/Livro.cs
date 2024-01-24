@@ -15,6 +15,7 @@ namespace EmprestimoLivrosNovo.Domain.Entities
         public string LivroEditora { get; private set; }
         public DateTime LivroAnoPublicacao { get; private set; }
         public string LivroEdicao { get; private set; }
+        public bool Excluido { get; private set; }
         public ICollection<LivroEmprestado> LivrosEmprestados { get; set; }
 
         public Livro(int id, string livroNome, string livroAutor, string livroEditora, DateTime livroAnoPublicacao, string livroEdicao)
@@ -32,6 +33,11 @@ namespace EmprestimoLivrosNovo.Domain.Entities
         public void Update(string livroNome, string livroAutor, string livroEditora, DateTime livroAnoPublicacao, string livroEdicao)
         {
             ValidateDomain(livroNome, livroAutor, livroEditora, livroAnoPublicacao, livroEdicao);
+        }
+
+        public void Excluir()
+        {
+            Excluido = true;
         }
 
         public void ValidateDomain(string livroNome, string livroAutor, string livroEditora, DateTime livroAnoPublicacao, string livroEdicao)

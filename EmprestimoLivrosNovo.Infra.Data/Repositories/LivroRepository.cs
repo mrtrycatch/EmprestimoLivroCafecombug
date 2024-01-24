@@ -33,7 +33,8 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             var livro = await _context.Livro.FindAsync(id);
             if (livro != null)
             {
-                _context.Livro.Remove(livro);
+                livro.Excluir();
+                _context.Livro.Update(livro);
                 await _context.SaveChangesAsync();
                 return livro;
             }
@@ -50,12 +51,12 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<Livro> SelecionarAsync(int id)
         {
-            return await _context.Livro.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Livro.Where(x => !x.Excluido).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<PagedList<Livro>> SelecionarByFiltroAsync(string nome, string autor, string editora, DateTime? anoPublicacao, string edicao, int pageNumber, int pageSize)
         {
-            var query = _context.Livro.AsQueryable();
+            var query = _context.Livro.Where(x => !x.Excluido).AsQueryable();
 
             if (!string.IsNullOrEmpty(nome))
             {
@@ -91,7 +92,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<PagedList<Livro>> SelecionarByFiltroAsync(string termo, int pageNumber, int pageSize)
         {
-            var query = _context.Livro.AsQueryable();
+            var query = _context.Livro.Where(x => !x.Excluido).AsQueryable();
 
             if (!string.IsNullOrEmpty(termo))
             {
@@ -110,7 +111,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<PagedList<Livro>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
-            var query = _context.Livro.AsQueryable();
+            var query = _context.Livro.Where(x => !x.Excluido).AsQueryable();
             return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
         }
     }

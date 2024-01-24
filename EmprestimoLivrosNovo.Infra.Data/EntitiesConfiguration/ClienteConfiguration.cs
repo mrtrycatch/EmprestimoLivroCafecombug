@@ -22,6 +22,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.EntitiesConfiguration
             builder.Property(x => x.CliNumero).HasMaxLength(50).IsRequired();
             builder.Property(x => x.CliTelefoneCelular).HasMaxLength(11).IsRequired();
             builder.Property(x => x.CliTelefoneFixo).HasMaxLength(10).IsRequired();
+            builder.Property(x => x.Excluido).IsRequired();
         }
     }
 }

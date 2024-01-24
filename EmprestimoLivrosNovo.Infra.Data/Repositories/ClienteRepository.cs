@@ -33,7 +33,8 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             var cliente = await _context.Cliente.FindAsync(id);
             if (cliente != null)
             {
-                _context.Cliente.Remove(cliente);
+                cliente.Excluir();
+                _context.Cliente.Update(cliente);
                 await _context.SaveChangesAsync();
                 return cliente;
             }
@@ -50,17 +51,17 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<Cliente> SelecionarAsync(int id)
         {
-            return await _context.Cliente.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Cliente.Where(x => !x.Excluido).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Cliente> SelecionarByCPFAsync(string cpf)
         {
-            return await _context.Cliente.Where(x => x.CliCPF.Equals(cpf)).FirstOrDefaultAsync();
+            return await _context.Cliente.Where(x => x.CliCPF.Equals(cpf) && !x.Excluido).FirstOrDefaultAsync();
         }
 
         public async Task<PagedList<Cliente>> SelecionarByFiltroAsync(string cpf, string nome, string cidade, string bairro, string telefoneCelular, string telefoneFixo, int pageNumber, int pageSize)
         {
-            var query = _context.Cliente.AsQueryable();
+            var query = _context.Cliente.Where(x => !x.Excluido).AsQueryable();
 
             if (!string.IsNullOrEmpty(cpf))
             {
@@ -100,7 +101,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<PagedList<Cliente>> SelecionarByFiltroAsync(string termo, int pageNumber, int pageSize)
         {
-            var query = _context.Cliente.AsQueryable();
+            var query = _context.Cliente.Where(x => !x.Excluido).AsQueryable();
 
             if (!string.IsNullOrEmpty(termo))
             {
@@ -121,7 +122,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<PagedList<Cliente>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
-            var query = _context.Cliente.AsQueryable();
+            var query = _context.Cliente.Where(x => !x.Excluido).AsQueryable();
             return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
         }
     }

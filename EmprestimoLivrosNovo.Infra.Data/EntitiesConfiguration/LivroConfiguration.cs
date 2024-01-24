@@ -18,6 +18,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.EntitiesConfiguration
             builder.Property(x => x.LivroAutor).HasMaxLength(200).IsRequired();
             builder.Property(x => x.LivroEditora).HasMaxLength(50).IsRequired();
             builder.Property(x => x.LivroEdicao).HasMaxLength(50).IsRequired();
+            builder.Property(x => x.Excluido).IsRequired();
         }
     }
 }

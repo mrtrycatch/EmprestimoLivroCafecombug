@@ -17,6 +17,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.EntitiesConfiguration
             builder.Property(x => x.Email).HasMaxLength(200).IsRequired();
             builder.Property(x => x.Nome).HasMaxLength(250).IsRequired();
             builder.Property(x => x.IsAdmin).IsRequired();
+            builder.Property(x => x.Ativo).HasDefaultValue(true).IsRequired();
         }
     }
 }

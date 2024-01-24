@@ -15,6 +15,7 @@ namespace EmprestimoLivrosNovo.Domain.Entities
         public bool IsAdmin { get; private set; }
         public byte[] PasswordHash { get; private set; }
         public byte[] PasswordSalt { get; private set; }
+        public bool Ativo { get; private set; }
 
         public Usuario(int id, string nome, string email)
         {
@@ -32,6 +33,16 @@ namespace EmprestimoLivrosNovo.Domain.Entities
         public void SetAdmin(bool isAdmin)
         {
             IsAdmin = isAdmin;
+        }
+
+        public void Desativar()
+        {
+            Ativo = false;
+        }
+
+        public void Ativar()
+        {
+            Ativo = true;
         }
 
         public void AlterarSenha(byte[] passwordHash, byte[] passwordSalt)
