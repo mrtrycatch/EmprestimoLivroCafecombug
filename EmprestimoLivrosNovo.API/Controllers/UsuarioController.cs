@@ -180,5 +180,24 @@ namespace EmprestimoLivrosNovo.API.Controllers
             return Ok(new {message = "Usuário alterado com sucesso!" });
         }
 
+        [HttpGet("filtrar")]
+        [Authorize]
+        public async Task<ActionResult> SelecionarTodosByFiltro([FromQuery] FiltroUsuario filtroUsuario)
+        {
+            var userId = User.GetId();
+            var user = await _usuarioService.SelecionarAsync(userId);
+
+            if (!user.IsAdmin)
+            {
+                return Unauthorized("Você não tem permissão para consultar os usuários do sistema.");
+            }
+
+            var usuarios = await _usuarioService.SelecionarByFiltroAsync(filtroUsuario.Nome, filtroUsuario.Email,
+                filtroUsuario.IsAdmin, filtroUsuario.PageNumber, filtroUsuario.PageSize);
+            Response.AddPaginationHeader(new PaginationHeader(filtroUsuario.PageNumber, usuarios.PageSize,
+                usuarios.TotalCount, usuarios.TotalPages));
+            return Ok(usuarios);
+        }
+
     }
 }

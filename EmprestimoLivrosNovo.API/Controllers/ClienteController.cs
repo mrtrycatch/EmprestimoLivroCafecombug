@@ -113,6 +113,18 @@ namespace EmprestimoLivrosNovo.API.Controllers
             return Ok(clientesDTO);
         }
 
+        [HttpGet("pesquisar")]
+        public async Task<ActionResult> SelecionarByPesquisa([FromQuery] PesquisaTermo pesquisaTermo)
+        {
+            var clientesDTO = await _clienteService.SelecionarByFiltroAsync
+                (pesquisaTermo.Termo, pesquisaTermo.PageNumber, pesquisaTermo.PageSize);
+
+            Response.AddPaginationHeader(new PaginationHeader(clientesDTO.CurrentPage,
+                clientesDTO.PageSize, clientesDTO.TotalCount, clientesDTO.TotalPages));
+
+            return Ok(clientesDTO);
+        }
+
 
     }
 }

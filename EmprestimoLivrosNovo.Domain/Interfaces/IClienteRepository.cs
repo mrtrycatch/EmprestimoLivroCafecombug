@@ -19,5 +19,6 @@ namespace EmprestimoLivrosNovo.Domain.Interfaces
         Task<PagedList<Cliente>> SelecionarByFiltroAsync(string cpf, string nome,
             string cidade, string bairro, string telefoneCelular, string telefoneFixo,
             int pageNumber, int pageSize);
+        Task<PagedList<Cliente>> SelecionarByFiltroAsync(string termo, int pageNumber, int pageSize);
     }
 }

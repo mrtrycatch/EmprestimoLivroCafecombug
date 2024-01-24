@@ -19,5 +19,6 @@ namespace EmprestimoLivrosNovo.Application.Interfaces
         Task<PagedList<LivroDTO>> SelecionarByFiltroAsync(
         string nome, string autor, string editora,
         DateTime? anoPublicacao, string edicao, int pageNumber, int pageSize);
+        Task<PagedList<LivroDTO>> SelecionarByFiltroAsync(string termo, int pageNumber, int pageSize);
     }
 }

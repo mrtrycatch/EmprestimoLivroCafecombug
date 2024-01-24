@@ -64,6 +64,30 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             return await _context.Usuario.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<PagedList<Usuario>> SelecionarByFiltroAsync(string nome, string email, bool? isAdmin, int pageNumber, int pageSize)
+        {
+            var query = _context.Usuario.AsQueryable();
+
+            if (!string.IsNullOrEmpty(nome))
+            {
+                query = query.Where(x => x.Nome.ToLower().Equals(nome.ToLower())
+                                     || x.Nome.ToLower().Contains(nome.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                query = query.Where(x => x.Email.ToLower().Equals(email.ToLower())
+                                     || x.Email.ToLower().Contains(email.ToLower()));
+            }
+
+            if (isAdmin.HasValue)
+            {
+                query = query.Where(x => x.IsAdmin == isAdmin.Value);
+            }
+
+            return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
+        }
+
         public async Task<PagedList<Usuario>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
             var query = _context.Usuario.AsQueryable();

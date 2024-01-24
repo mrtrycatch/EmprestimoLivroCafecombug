@@ -27,7 +27,7 @@ namespace EmprestimoLivrosNovo.API.Models
         public int PageNumber { get; set; }
 
         [Required(ErrorMessage = "A quantidade de itens por página é obrigatória")]
-        [Range(1, 50, ErrorMessage = "O tamanho da página deve estar entre 1 e 100.")]
+        [Range(1, 50, ErrorMessage = "O tamanho da página deve estar entre 1 e 50.")]
         public int PageSize { get; set; }
 
 

@@ -98,6 +98,27 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
         }
 
+        public async Task<PagedList<Cliente>> SelecionarByFiltroAsync(string termo, int pageNumber, int pageSize)
+        {
+            var query = _context.Cliente.AsQueryable();
+
+            if (!string.IsNullOrEmpty(termo))
+            {
+                termo = termo.ToLower();
+
+                query = query.Where(x =>
+                    x.CliNome.ToLower().Contains(termo) ||
+                    x.CliCPF.Contains(termo) ||
+                    x.CliCidade.ToLower().Contains(termo) ||
+                    x.CliBairro.ToLower().Contains(termo) ||
+                    x.CliTelefoneCelular.Contains(termo) ||
+                    x.CliTelefoneFixo.Contains(termo)
+                );
+            }
+
+            return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
+        }
+
         public async Task<PagedList<Cliente>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
             var query = _context.Cliente.AsQueryable();
