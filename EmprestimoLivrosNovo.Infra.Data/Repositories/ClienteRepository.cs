@@ -53,6 +53,51 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             return await _context.Cliente.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Cliente> SelecionarByCPFAsync(string cpf)
+        {
+            return await _context.Cliente.Where(x => x.CliCPF.Equals(cpf)).FirstOrDefaultAsync();
+        }
+
+        public async Task<PagedList<Cliente>> SelecionarByFiltroAsync(string cpf, string nome, string cidade, string bairro, string telefoneCelular, string telefoneFixo, int pageNumber, int pageSize)
+        {
+            var query = _context.Cliente.AsQueryable();
+
+            if (!string.IsNullOrEmpty(cpf))
+            {
+                query = query.Where(x => x.CliCPF.Equals(cpf));
+            }
+
+            if (!string.IsNullOrEmpty(nome))
+            {
+                query = query.Where(x => x.CliNome.ToLower().Equals(nome.ToLower())
+                || x.CliNome.ToLower().Contains(nome.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(cidade))
+            {
+                query = query.Where(x => x.CliCidade.ToLower().Equals(cidade.ToLower())
+                || x.CliCidade.ToLower().Contains(cidade.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(bairro))
+            {
+                query = query.Where(x => x.CliBairro.ToLower().Equals(bairro.ToLower())
+                || x.CliBairro.ToLower().Contains(bairro.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(telefoneCelular))
+            {
+                query = query.Where(x => x.CliTelefoneCelular.Equals(telefoneCelular));
+            }
+
+            if (!string.IsNullOrEmpty(telefoneFixo))
+            {
+                query = query.Where(x => x.CliTelefoneFixo.Equals(telefoneFixo));
+            }
+
+            return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
+        }
+
         public async Task<PagedList<Cliente>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
             var query = _context.Cliente.AsQueryable();

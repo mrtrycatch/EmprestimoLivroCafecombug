@@ -14,6 +14,10 @@ namespace EmprestimoLivrosNovo.Domain.Interfaces
         Task<Cliente> Alterar(Cliente cliente);
         Task<Cliente> Excluir(int id);
         Task<Cliente> SelecionarAsync(int id);
+        Task<Cliente> SelecionarByCPFAsync(string cpf);
         Task<PagedList<Cliente>> SelecionarTodosAsync(int pageNumber, int pageSize);
+        Task<PagedList<Cliente>> SelecionarByFiltroAsync(string cpf, string nome,
+            string cidade, string bairro, string telefoneCelular, string telefoneFixo,
+            int pageNumber, int pageSize);
     }
 }

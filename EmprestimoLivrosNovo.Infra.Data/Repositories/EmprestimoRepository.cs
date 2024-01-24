@@ -53,6 +53,49 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             return await _context.Emprestimo.Include(x => x.Cliente).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<PagedList<Emprestimo>> SelecionarByFiltroAsync(string cpf, string nome, DateTime? dataEmprestimoInicio, DateTime? dataEmprestimoFim, DateTime? dataEntregaInicio, DateTime? dataEntregaFim, bool? entregue, int pageNumber, int pageSize)
+        {
+            var query = _context.Emprestimo.Include(x => x.Cliente).AsQueryable();
+
+            if (!string.IsNullOrEmpty(cpf))
+            {
+                query = query.Where(x => x.Cliente.CliCPF.Equals(cpf));
+            }
+
+            if (!string.IsNullOrEmpty(nome))
+            {
+                query = query.Where(x => x.Cliente.CliNome.ToLower().Equals(nome.ToLower())
+                                     || x.Cliente.CliNome.ToLower().Contains(nome.ToLower()));
+            }
+
+            if (dataEmprestimoInicio.HasValue)
+            {
+                query = query.Where(x => dataEmprestimoInicio.Value <= x.DataEmprestimo);
+            }
+
+            if (dataEmprestimoFim.HasValue)
+            {
+                query = query.Where(x => x.DataEmprestimo <= dataEmprestimoFim.Value);
+            }
+
+            if (dataEntregaInicio.HasValue)
+            {
+                query = query.Where(x => dataEntregaInicio.Value <= x.DataEntrega);
+            }
+
+            if (dataEntregaFim.HasValue)
+            {
+                query = query.Where(x => x.DataEntrega <= dataEntregaFim.Value);
+            }
+
+            if (entregue.HasValue)
+            {
+                query = query.Where(x => x.Entregue == entregue.Value);
+            }
+
+            return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
+        }
+
         public async Task<PagedList<Emprestimo>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
             var query = _context.Emprestimo.Include(x => x.Cliente).AsQueryable();

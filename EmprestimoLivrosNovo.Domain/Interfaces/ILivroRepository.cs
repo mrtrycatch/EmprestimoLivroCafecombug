@@ -15,5 +15,8 @@ namespace EmprestimoLivrosNovo.Domain.Interfaces
         Task<Livro> Excluir(int id);
         Task<Livro> SelecionarAsync(int id);
         Task<PagedList<Livro>> SelecionarTodosAsync(int pageNumber, int pageSize);
+        Task<PagedList<Livro>> SelecionarByFiltroAsync(
+        string nome, string autor, string editora,
+        DateTime? anoPublicacao, string edicao, int pageNumber, int pageSize);
     }
 }

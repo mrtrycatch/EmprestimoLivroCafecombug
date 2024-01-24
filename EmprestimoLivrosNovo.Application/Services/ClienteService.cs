@@ -49,6 +49,23 @@ namespace EmprestimoLivrosNovo.Application.Services
             return _mapper.Map<ClienteDTO>(cliente);
         }
 
+        public async Task<ClienteDTO> SelecionarByCpfAsync(string cpf)
+        {
+            var cliente = await _repository.SelecionarByCPFAsync(cpf);
+            return _mapper.Map<ClienteDTO>(cliente);
+        }
+
+        public async Task<PagedList<ClienteDTO>> SelecionarByFiltroAsync(string cpf, string nome, string cidade,
+            string bairro, string telefoneCelular, string telefoneFixo, int pageNumber, int pageSize)
+        {
+            var clientes = await _repository.SelecionarByFiltroAsync( cpf,  nome, cidade,
+             bairro,  telefoneCelular, telefoneFixo, pageNumber, pageSize);
+
+            var clientesDTO = _mapper.Map<IEnumerable<ClienteDTO>>(clientes);
+
+            return new PagedList<ClienteDTO>(clientesDTO, pageNumber, pageSize, clientes.TotalCount);
+        }
+
         public async Task<PagedList<ClienteDTO>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
             var clientes = await _repository.SelecionarTodosAsync(pageNumber, pageSize);

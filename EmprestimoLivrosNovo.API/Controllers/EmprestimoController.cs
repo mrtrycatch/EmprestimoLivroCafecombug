@@ -2,6 +2,7 @@
 using EmprestimoLivrosNovo.API.Models;
 using EmprestimoLivrosNovo.Application.DTOs;
 using EmprestimoLivrosNovo.Application.Interfaces;
+using EmprestimoLivrosNovo.Application.Services;
 using EmprestimoLivrosNovo.Infra.Ioc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -136,6 +137,21 @@ namespace EmprestimoLivrosNovo.API.Controllers
 
             Response.AddPaginationHeader(new PaginationHeader(paginationParams.PageNumber,
                 paginationParams.PageSize, emprestimosDTO.TotalCount, emprestimosDTO.TotalPages));
+
+            return Ok(emprestimosDTO);
+        }
+
+        [HttpGet("filtrar")]
+        public async Task<ActionResult> SelecionarTodosByFiltro([FromQuery] FiltroEmprestimo filtroEmprestimo)
+        {
+            var emprestimosDTO = await _emprestimoService.SelecionarByFiltroAsync
+                (filtroEmprestimo.Cpf, filtroEmprestimo.Nome,
+                 filtroEmprestimo.DataEmprestimoInicio, filtroEmprestimo.DataEmprestimoFim,
+                 filtroEmprestimo.DataEntregaInicio, filtroEmprestimo.DataEntregaFim,
+                 filtroEmprestimo.Entregue, filtroEmprestimo.PageNumber, filtroEmprestimo.PageSize);
+
+            Response.AddPaginationHeader(new PaginationHeader(filtroEmprestimo.PageNumber,
+                filtroEmprestimo.PageSize, emprestimosDTO.TotalCount, emprestimosDTO.TotalPages));
 
             return Ok(emprestimosDTO);
         }

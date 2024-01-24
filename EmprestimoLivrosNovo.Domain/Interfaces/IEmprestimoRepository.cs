@@ -15,6 +15,9 @@ namespace EmprestimoLivrosNovo.Domain.Interfaces
         Task<Emprestimo> Excluir(int id);
         Task<Emprestimo> SelecionarAsync(int id);
         Task<PagedList<Emprestimo>> SelecionarTodosAsync(int pageNumber, int pageSize);
+        Task<PagedList<Emprestimo>> SelecionarByFiltroAsync(string cpf, string nome,
+            DateTime? dataEmprestimoInicio, DateTime? dataEmprestimoFim, DateTime? dataEntregaInicio,
+            DateTime? dataEntregaFim, bool? entregue, int pageNumber, int pageSize);
         Task<bool> VerificaDisponibilidadeAsync(int[] idsLivros);
     }
 }

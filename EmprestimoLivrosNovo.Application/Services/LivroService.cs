@@ -49,6 +49,14 @@ namespace EmprestimoLivrosNovo.Application.Services
             return _mapper.Map<LivroDTO>(livro);
         }
 
+        public async Task<PagedList<LivroDTO>> SelecionarByFiltroAsync(string nome, string autor, string editora, DateTime? anoPublicacao, string edicao, int pageNumber, int pageSize)
+        {
+            var livros = await _repository.SelecionarByFiltroAsync( nome,  autor,  editora, anoPublicacao, edicao,
+                 pageNumber, pageSize);
+            var livrosDTO = _mapper.Map<IEnumerable<LivroDTO>>(livros);
+            return new PagedList<LivroDTO>(livrosDTO, pageNumber, pageSize, livros.TotalCount);
+        }
+
         public async Task<PagedList<LivroDTO>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
             var livros = await _repository.SelecionarTodosAsync(pageNumber, pageSize);

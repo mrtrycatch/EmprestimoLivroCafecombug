@@ -26,6 +26,13 @@ namespace EmprestimoLivrosNovo.API.Controllers
         [HttpPost]
         public async Task<ActionResult> Incluir(ClienteDTO clienteDTO)
         {
+
+            var clienteExistente = await _clienteService.SelecionarByCpfAsync(clienteDTO.CliCPF);
+            if (clienteExistente != null)
+            {
+                return BadRequest("Já existe um cliente cadastrado com esse CPF");
+            }
+
             var clienteDTOIncluido = await _clienteService.Incluir(clienteDTO);
             if (clienteDTOIncluido == null)
             {
@@ -85,6 +92,20 @@ namespace EmprestimoLivrosNovo.API.Controllers
         {
             var clientesDTO = await _clienteService.SelecionarTodosAsync
                 (paginationParams.PageNumber, paginationParams.PageSize);
+
+            Response.AddPaginationHeader(new PaginationHeader(clientesDTO.CurrentPage,
+                clientesDTO.PageSize, clientesDTO.TotalCount, clientesDTO.TotalPages));
+
+            return Ok(clientesDTO);
+        }
+
+        [HttpGet("filtrar")]
+        public async Task<ActionResult> SelecionarTodosByFiltro([FromQuery] FiltroCliente filtroCliente)
+        {
+            var clientesDTO = await _clienteService.SelecionarByFiltroAsync
+                (filtroCliente.Cpf, filtroCliente.Nome, filtroCliente.Cidade,
+                 filtroCliente.Bairro, filtroCliente.TelefoneCelular,
+                 filtroCliente.TelefoneFixo, filtroCliente.PageNumber, filtroCliente.PageSize);
 
             Response.AddPaginationHeader(new PaginationHeader(clientesDTO.CurrentPage,
                 clientesDTO.PageSize, clientesDTO.TotalCount, clientesDTO.TotalPages));

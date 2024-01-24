@@ -82,5 +82,18 @@ namespace EmprestimoLivrosNovo.API.Controllers
 
             return Ok(livrosDTO);
         }
+
+        [HttpGet("filtrar")]
+        public async Task<ActionResult> SelecionarTodosByFiltro([FromQuery] FiltroLivro filtroLivro)
+        {
+            var livrosDTO = await _livroService.SelecionarByFiltroAsync(filtroLivro.Nome, filtroLivro.Autor,
+                filtroLivro.Editora, filtroLivro.AnoPublicacao, filtroLivro.Edicao, filtroLivro.PageNumber,
+                filtroLivro.PageSize);
+
+            Response.AddPaginationHeader(new PaginationHeader(filtroLivro.PageNumber,
+                filtroLivro.PageSize, livrosDTO.TotalCount, livrosDTO.TotalPages));
+
+            return Ok(livrosDTO);
+        }
     }
 }
