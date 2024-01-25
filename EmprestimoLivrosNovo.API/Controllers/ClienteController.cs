@@ -54,7 +54,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
             return Ok(new { message = "Cliente alterado com sucesso!" });
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Excluir(int id)
         {
 

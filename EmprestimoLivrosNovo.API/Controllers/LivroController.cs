@@ -47,7 +47,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
             return Ok(new { message = "Livro alterado com sucesso!" });
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Excluir(int id)
         {
             var livroDTOExcluido = await _livroService.Excluir(id);
