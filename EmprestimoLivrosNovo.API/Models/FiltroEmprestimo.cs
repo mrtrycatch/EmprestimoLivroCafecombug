@@ -18,6 +18,7 @@ namespace EmprestimoLivrosNovo.API.Models
         public DateTime? DataEntregaFim { get; set; }
 
         public bool? Entregue { get; set; }
+        public bool? NaoEntregue { get; set; }
 
         [Required(ErrorMessage = "A página é obrigatória")]
         [Range(1, int.MaxValue, ErrorMessage = "O número da página deve ser maior que zero.")]

@@ -148,7 +148,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
                 (filtroEmprestimo.Cpf, filtroEmprestimo.Nome,
                  filtroEmprestimo.DataEmprestimoInicio, filtroEmprestimo.DataEmprestimoFim,
                  filtroEmprestimo.DataEntregaInicio, filtroEmprestimo.DataEntregaFim,
-                 filtroEmprestimo.Entregue, filtroEmprestimo.PageNumber, filtroEmprestimo.PageSize);
+                 filtroEmprestimo.Entregue, filtroEmprestimo.NaoEntregue, filtroEmprestimo.PageNumber, filtroEmprestimo.PageSize);
 
             Response.AddPaginationHeader(new PaginationHeader(filtroEmprestimo.PageNumber,
                 filtroEmprestimo.PageSize, emprestimosDTO.TotalCount, emprestimosDTO.TotalPages));

@@ -53,7 +53,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             return await _context.Emprestimo.Include(x => x.Cliente).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<PagedList<Emprestimo>> SelecionarByFiltroAsync(string cpf, string nome, DateTime? dataEmprestimoInicio, DateTime? dataEmprestimoFim, DateTime? dataEntregaInicio, DateTime? dataEntregaFim, bool? entregue, int pageNumber, int pageSize)
+        public async Task<PagedList<Emprestimo>> SelecionarByFiltroAsync(string cpf, string nome, DateTime? dataEmprestimoInicio, DateTime? dataEmprestimoFim, DateTime? dataEntregaInicio, DateTime? dataEntregaFim, bool? entregue, bool? naoEntregue, int pageNumber, int pageSize)
         {
             var query = _context.Emprestimo.Include(x => x.Cliente).AsQueryable();
 
@@ -88,9 +88,14 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
                 query = query.Where(x => x.DataEntrega <= dataEntregaFim.Value);
             }
 
-            if (entregue.HasValue)
+            if (entregue.HasValue && entregue == true)
             {
-                query = query.Where(x => x.Entregue == entregue.Value);
+                query = query.Where(x => x.Entregue == true);
+            }
+
+            if (naoEntregue.HasValue && naoEntregue == true)
+            {
+                query = query.Where(x => x.Entregue == false);
             }
 
             return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);

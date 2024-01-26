@@ -49,11 +49,11 @@ namespace EmprestimoLivrosNovo.Application.Services
             return _mapper.Map<EmprestimoDTO>(emprestimo);
         }
 
-        public async Task<PagedList<EmprestimoDTO>> SelecionarByFiltroAsync(string cpf, string nome, DateTime? dataEmprestimoInicio, DateTime? dataEmprestimoFim, DateTime? dataEntregaInicio, DateTime? dataEntregaFim, bool? entregue, int pageNumber, int pageSize)
+        public async Task<PagedList<EmprestimoDTO>> SelecionarByFiltroAsync(string cpf, string nome, DateTime? dataEmprestimoInicio, DateTime? dataEmprestimoFim, DateTime? dataEntregaInicio, DateTime? dataEntregaFim, bool? entregue, bool? naoEntregue, int pageNumber, int pageSize)
         {
             var emprestimos = await _repository.SelecionarByFiltroAsync( cpf, nome,
                 dataEmprestimoInicio, dataEmprestimoFim,dataEntregaInicio,dataEntregaFim,
-                entregue,pageNumber,  pageSize);
+                entregue, naoEntregue, pageNumber,  pageSize);
             
             var emprestimosDTO = _mapper.Map<IEnumerable<EmprestimoDTO>>(emprestimos);
             return new PagedList<EmprestimoDTO>(emprestimosDTO, pageNumber, pageSize, emprestimos.TotalCount);

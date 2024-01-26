@@ -5,6 +5,7 @@ namespace EmprestimoLivrosNovo.API.Models
 {
     public class FiltroLivro
     {
+        [MaxLength(50, ErrorMessage = "O nome do livro não pode ultrapassar de 50 caracteres.")]
         public string Nome { get; set; }
         [MaxLength(200, ErrorMessage = "O autor do livro não pode ultrapassar de 200 caracteres.")]
         public string Autor { get; set; }
