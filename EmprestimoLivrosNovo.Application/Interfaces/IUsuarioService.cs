@@ -17,7 +17,6 @@ namespace EmprestimoLivrosNovo.Application.Interfaces
         Task<UsuarioDTO> SelecionarAsync(int id);
         Task<PagedList<UsuarioDTO>> SelecionarTodosAsync(int pageNumber, int pageSize);
         Task<bool> ExisteUsuarioCadastradoAsync();
-        Task<PagedList<UsuarioDTO>> SelecionarByFiltroAsync(
-        string nome, string email, bool? isAdmin, int pageNumber, int pageSize);
+        Task<PagedList<UsuarioDTO>> SelecionarByFiltroAsync(string nome, string email, bool? isAdmin, bool? isNotAdmin, bool? ativo, bool? inativo, int pageNumber, int pageSize);
     }
 }

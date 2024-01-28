@@ -64,9 +64,9 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
             return await _context.Usuario.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<PagedList<Usuario>> SelecionarByFiltroAsync(string nome, string email, bool? isAdmin, int pageNumber, int pageSize)
+        public async Task<PagedList<Usuario>> SelecionarByFiltroAsync(string nome, string email, bool? isAdmin, bool? isNotAdmin, bool? ativo, bool? inativo, int pageNumber, int pageSize)
         {
-            var query = _context.Usuario.AsQueryable();
+            var query = _context.Usuario.OrderByDescending(x => x.Id).AsQueryable();
 
             if (!string.IsNullOrEmpty(nome))
             {
@@ -80,9 +80,21 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
                                      || x.Email.ToLower().Contains(email.ToLower()));
             }
 
-            if (isAdmin.HasValue)
+            if (isAdmin.HasValue && isAdmin == true)
             {
-                query = query.Where(x => x.IsAdmin == isAdmin.Value);
+                query = query.Where(x => x.IsAdmin == true);
+            }
+            if (isNotAdmin.HasValue && isNotAdmin == true)
+            {
+                query = query.Where(x => x.IsAdmin == false);
+            }
+            if (ativo.HasValue && ativo == true)
+            {
+                query = query.Where(x => x.Ativo == true);
+            }
+            if (inativo.HasValue && inativo == true)
+            {
+                query = query.Where(x => x.Ativo == false);
             }
 
             return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
@@ -90,7 +102,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<PagedList<Usuario>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
-            var query = _context.Usuario.AsQueryable();
+            var query = _context.Usuario.OrderByDescending(x => x.Id).AsQueryable();
             return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
         }
     }

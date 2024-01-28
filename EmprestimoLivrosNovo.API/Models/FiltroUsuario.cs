@@ -10,6 +10,9 @@ namespace EmprestimoLivrosNovo.API.Models
         [MaxLength(250, ErrorMessage = "O E-mail não pode ter mais de 200 caracteres")]
         public string Email { get; set; }
         public bool? IsAdmin { get; set; }
+        public bool? IsNotAdmin { get; set; }
+        public bool? Ativo { get; set; }
+        public bool? Inativo { get; set; }
         [Required(ErrorMessage = "A página é obrigatória")]
         [Range(1, int.MaxValue, ErrorMessage = "O número da página deve ser maior que zero.")]
         public int PageNumber { get; set; }

@@ -194,7 +194,7 @@ namespace EmprestimoLivrosNovo.API.Controllers
             }
 
             var usuarios = await _usuarioService.SelecionarByFiltroAsync(filtroUsuario.Nome, filtroUsuario.Email,
-                filtroUsuario.IsAdmin, filtroUsuario.PageNumber, filtroUsuario.PageSize);
+                filtroUsuario.IsAdmin, filtroUsuario.IsNotAdmin, filtroUsuario.Ativo, filtroUsuario.Inativo, filtroUsuario.PageNumber, filtroUsuario.PageSize);
             Response.AddPaginationHeader(new PaginationHeader(filtroUsuario.PageNumber, usuarios.PageSize,
                 usuarios.TotalCount, usuarios.TotalPages));
             return Ok(usuarios);

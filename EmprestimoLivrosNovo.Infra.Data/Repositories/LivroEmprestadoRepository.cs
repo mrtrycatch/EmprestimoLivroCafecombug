@@ -71,7 +71,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<IEnumerable<LivroEmprestado>> SelecionarTodosByEmprestimoAsync(int id)
         {
-            return await _context.LivroEmprestado.Where(x => x.IdEmprestimo == id).Include(x => x.Livro).ToListAsync();
+            return await _context.LivroEmprestado.Where(x => x.IdEmprestimo == id).Include(x => x.Livro).OrderByDescending(x => x.Id).ToListAsync();
         }
 
         public async Task<IEnumerable<LivroEmprestado>> SubstituirTodosAsync(List<LivroEmprestado> livrosEmprestados)

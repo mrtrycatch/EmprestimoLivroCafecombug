@@ -56,7 +56,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<PagedList<Livro>> SelecionarByFiltroAsync(string nome, string autor, string editora, DateTime? anoPublicacao, string edicao, int pageNumber, int pageSize)
         {
-            var query = _context.Livro.Where(x => !x.Excluido).AsQueryable();
+            var query = _context.Livro.Where(x => !x.Excluido).OrderByDescending(x => x.Id).AsQueryable();
 
             if (!string.IsNullOrEmpty(nome))
             {
@@ -92,7 +92,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<PagedList<Livro>> SelecionarByFiltroAsync(string termo, int pageNumber, int pageSize)
         {
-            var query = _context.Livro.Where(x => !x.Excluido).AsQueryable();
+            var query = _context.Livro.Where(x => !x.Excluido).OrderByDescending(x => x.Id).AsQueryable();
 
             if (!string.IsNullOrEmpty(termo))
             {
@@ -111,7 +111,7 @@ namespace EmprestimoLivrosNovo.Infra.Data.Repositories
 
         public async Task<PagedList<Livro>> SelecionarTodosAsync(int pageNumber, int pageSize)
         {
-            var query = _context.Livro.Where(x => !x.Excluido).AsQueryable();
+            var query = _context.Livro.Where(x => !x.Excluido).OrderByDescending(x => x.Id).AsQueryable();
             return await PaginationHelper.CreateAsync(query, pageNumber, pageSize);
         }
     }
