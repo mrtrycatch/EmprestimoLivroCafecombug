@@ -29,6 +29,9 @@ namespace EmprestimoLivrosNovo.Infra.Ioc
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+
+                //options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+                //    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
             });
 
             services.AddAuthentication(opt =>
